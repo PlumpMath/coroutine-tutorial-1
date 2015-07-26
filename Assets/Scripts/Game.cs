@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ public static class Game
 {
     public static Player player;
     
-    static GameObject currentLevel;
+    public static GameObject currentLevel;
     static GameObject currentPopup;
     static Dictionary<string, UnityEngine.Object> cachedObjects = new Dictionary<string, UnityEngine.Object>();
     
@@ -17,6 +18,9 @@ public static class Game
             GameObject.Destroy(player.gameObject);
             
         player = Game.Create("Player").GetComponent<Player>();
+        
+        GameObject playerSpawnPoint = GameObject.Find("PlayerSpawn");
+        player.transform.position = playerSpawnPoint.transform.position;
     }
 
     public static void OpenLevel(string levelName)
@@ -41,10 +45,14 @@ public static class Game
     
     public static GameObject Create(string prefabName)
     {
-        if (!cachedObjects.ContainsKey(prefabName))
-            cachedObjects[prefabName] = Resources.Load(prefabName);
+        // Full path: Assets/Resources/MyPrefab/MyPrefab
+        // prefabPath: MyPrefab/MyPrefab
+        string prefabPath = prefabName + "/" + prefabName;
+    
+        if (!cachedObjects.ContainsKey(prefabPath))
+            cachedObjects[prefabPath] = Resources.Load(prefabPath);
             
-        return (GameObject)Object.Instantiate(cachedObjects[prefabName]);
+        return (GameObject)Object.Instantiate(cachedObjects[prefabPath]);
     }
     
     public static void Restart()

@@ -3,12 +3,14 @@ using System.Collections;
 
 public class TestLevel : MonoBehaviour 
 {
+    public Transform enemySpawnPoint;
+
     // enemy spawn variables
     float lastSpawnTime = 0.0f;
     float spawnDelay = 1.5f;
     
     // enemy spawn increase variables
-    int enemiesPerSpawn = 0;
+    int enemiesPerSpawn = 1;
     float lastEnemyPerSpawnIncreaseTime = 0.0f;
     float enemyPerSpawnIncreaseDelay = 7.0f;
     
@@ -23,11 +25,25 @@ public class TestLevel : MonoBehaviour
     
     void Update() 
     {
+        if (Game.player != null)
+        {
+            float currTime = Time.realtimeSinceStartup;
+            
+            if ((currTime - lastSpawnTime) >= spawnDelay)
+                SpawnEnemy();
+                
+            // If the last time we spawned enemies was longer than our spawn increase delay,
+            // increase the number of enemies that spawn on each spawn
+            if ((currTime - lastEnemyPerSpawnIncreaseTime) >= enemyPerSpawnIncreaseDelay)
+                IncreaseSpawnCount();
+        }
+    
+        /*
         if (Game.player.IsAlive())
         {
             float currTime = Time.realtimeSinceStartup;
             
-            // if the last time we spawned enemies was longer than our spawn increase delay,
+            // If the last time we spawned enemies was longer than our spawn increase delay,
             // increase the number of enemies that spawn on each spawn
             if ((currTime - lastEnemyPerSpawnIncreaseTime) >= enemyPerSpawnIncreaseDelay)
                 IncreaseSpawnCount();
@@ -59,13 +75,15 @@ public class TestLevel : MonoBehaviour
         {
             Game.Restart();
         }
+        */
     }
     
     public void SpawnEnemy()
     {
         for (int i = 0; i < enemiesPerSpawn; ++i)
         {
-            Game.Create("CruxArtillery");
+            GameObject enemyGo = Game.Create("Enemy");
+            enemyGo.transform.position = enemySpawnPoint.position;
             lastSpawnTime = Time.realtimeSinceStartup; // reset the timer
         }
     }

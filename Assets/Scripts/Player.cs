@@ -33,8 +33,6 @@ public class Player : MonoBehaviour
     
     public void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Player.OnCollisionEnter"); // #debug
-    
         // If we hit an enemy, destroy it...
         if (other != null)
         {

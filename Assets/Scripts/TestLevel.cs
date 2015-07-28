@@ -9,10 +9,10 @@ public class TestLevel : MonoBehaviour
     float lastSpawnTime = 0.0f;
     float spawnDelay = 1.5f;
     
-    // enemy spawn increase variables
+    // Enemy spawn increase variables
     int enemiesPerSpawn = 1;
-    float lastEnemyPerSpawnIncreaseTime = 0.0f;
-    float enemyPerSpawnIncreaseDelay = 7.0f;
+    float lastSpawnDelayDecreaseTime = 0.0f;
+    float increaseSpawnRateInterval = 1.5f;
     
     void Awake()
     {
@@ -32,10 +32,15 @@ public class TestLevel : MonoBehaviour
             if ((currTime - lastSpawnTime) >= spawnDelay)
                 SpawnEnemy();
                 
+            if ((currTime - lastSpawnDelayDecreaseTime) >= increaseSpawnRateInterval)
+                DecreaseSpawnDelay();
+                
             // If the last time we spawned enemies was longer than our spawn increase delay,
             // increase the number of enemies that spawn on each spawn
+            /*
             if ((currTime - lastEnemyPerSpawnIncreaseTime) >= enemyPerSpawnIncreaseDelay)
                 IncreaseSpawnCount();
+            */
         }
     
         /*
@@ -88,9 +93,17 @@ public class TestLevel : MonoBehaviour
         }
     }
     
-    public void IncreaseSpawnCount()
+    public void DecreaseSpawnDelay()
     {
-        ++enemiesPerSpawn;
-        lastEnemyPerSpawnIncreaseTime = Time.realtimeSinceStartup;
+        // Reduce by 1 tenth, cap to .2f delay
+        spawnDelay = Mathf.Max(spawnDelay - 0.15f, 0.2f);
+        lastSpawnDelayDecreaseTime = Time.realtimeSinceStartup;
+    }
+    
+    public void OnFireClicked()
+    {
+        // Try to make the player shoot if available
+        if (Game.player != null)
+            Game.player.Fire();
     }
 }

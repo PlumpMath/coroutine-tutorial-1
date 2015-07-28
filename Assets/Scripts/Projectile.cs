@@ -4,7 +4,7 @@ using System.Collections;
 public class Projectile : MonoBehaviour 
 {
     public const float cleanupDistance = 20.0f;
-    float speed = 10.0f;
+    float speed = 16.0f;
 
 	// Use this for initialization
 	void Start () 
@@ -29,6 +29,5 @@ public class Projectile : MonoBehaviour
     
     public void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Projectile.OnCollisionEnter : "); // #debug
     }
 }

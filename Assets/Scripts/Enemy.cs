@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour 
 {
-    public float speed = 7.0f;
+    public float speed = 11.0f;
 
 	// Use this for initialization
 	void Start()
@@ -30,8 +30,6 @@ public class Enemy : MonoBehaviour
     
     public void OnCollisionEnter(Collision other)
     {    
-        Debug.Log("Projectile.OnTriggerEnter : "); // #debug
-        
         // If we hit an enemy, destroy it...
         if (other != null)
         {
